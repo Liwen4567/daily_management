@@ -1,0 +1,21 @@
+.container {
+  &>div {
+    margin-bottom: 12px;
+  }
+}
+
+.btn {
+  display: block;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+.modal{
+  .tt{
+    text-align: center;
+    padding-left: 50px;
+  }
+  .form>div{
+    margin-top: 10px;
+  }
+}

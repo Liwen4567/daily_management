@@ -1,0 +1,24 @@
+.contanier {
+    width: 544px;
+    height: 260px;
+
+    background: #FDFDFD;
+    box-shadow: 4px 15px 66px 0px rgba(117, 117, 117, 0.1);
+    border-radius: 5px;
+    padding: 12px 25px;
+    // outline: 1px solid;
+    margin-top: 44px;
+
+    .info {
+        display: flex;
+        
+        align-items: center;
+
+        .infoText {
+            margin-left: 80px;
+            &>div {
+                margin-top: 10px;
+            }
+        }
+    }
+}

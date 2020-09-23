@@ -1,0 +1,32 @@
+.container {
+    width: 240px;
+    display: flex;
+    justify-content: center;
+
+    .label {
+        display: flex;
+        width: 75px;
+        justify-content: flex-end;
+        font-size: 9px;
+        color: #5B5B5B;
+        line-height: 18px;
+
+    }
+
+    .msgLine {
+        display: flex;
+        margin-left: 15px;
+        width: 160px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 10px;
+        color: #000000;
+        justify-content: center;
+
+        font-weight: 400;
+
+        background: #FFFFFF;
+        box-shadow: 4px 15px 66px 0px rgba(117, 117, 117, 0.1);
+        border-radius: 5px;
+    }
+}

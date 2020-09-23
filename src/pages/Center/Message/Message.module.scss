@@ -1,0 +1,54 @@
+.container {
+  padding: 25px;
+  max-height: 400px;
+
+  .button {
+    margin-bottom: 10px;
+  }
+
+  .input {
+    width: 180px;
+    margin-left: 10px;
+    margin-bottom: 15px;
+  }
+
+  .span {
+    font-size: 16px;
+    color: rgba(136, 136, 136, 1);
+  }
+
+
+  .collapse {
+    background-color: rgb(245, 245, 245);
+    font-size: 12px;
+    color: rgba(91, 91, 91, 1);
+    width: 100%;
+    max-height: 400px;
+    overflow-y: auto;
+
+  }
+
+
+
+}
+
+.msgHeader {
+  display: flex;
+
+  .msgDot {
+    width: 11px;
+    height: 11px;
+    background: url('~@/assets/images/dot@2x.png');
+    background-size: 11px 11px;
+    margin-right: 10px;
+  }
+
+  .msgContent {
+    max-width: 550px;
+    font-size: 12px;
+    color: rgba(91, 91, 91, 1);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
