@@ -11,6 +11,7 @@
 import React, {
   FormEvent,
   ReactElement,
+  useEffect,
   useState,
 } from 'react';
 
@@ -41,6 +42,9 @@ import {
   quitFavorite,
   quitItem,
 } from '@/services/apis/item';
+import {
+  getUserInfo,
+} from '@/services/apis/user';
 import { download } from '@/utils';
 import {
   InfoCircleOutlined,
@@ -128,6 +132,24 @@ function Info({ type }: Props): ReactElement {
     appliedValue = '取消报名',
     unAppliedValue = '我要报名'
   }
+  const [role, setrole] = useState("")
+  const [showHint, setshowHint] = useState(false)
+
+  const userInfoR = useRequest(getUserInfo, {
+    onSuccess: (result, param) => {
+      if (result.data) {
+
+        //setrole(result.data.info.role)
+        setrole("学生")
+      }
+    }
+  })
+  
+
+
+
+
+
   const meetingInfoR = useRequest((meetingId = _meetingId) => getItemInfo(meetingId), {
     onSuccess: (result, params) => {
       if (result.data) {
@@ -254,7 +276,12 @@ function Info({ type }: Props): ReactElement {
     e.preventDefault()
     if (info.isApplied) {
       quitItemR.run()
-    } else {
+    }else if(role == ""){//如果没有完善身份信息
+      setshowHint(true)
+    }else if(role == "学生"){
+      applyItemR.run()
+    }
+    else {
       setShowModal(true)
     }
   }
@@ -280,6 +307,14 @@ function Info({ type }: Props): ReactElement {
       favoriteR.run()
     }
   }
+
+
+
+
+
+
+
+  
 
   const auth = authContainer.useContainer()
   // console.log(auth.isLogin)
@@ -314,12 +349,12 @@ function Info({ type }: Props): ReactElement {
                   value={info.isApplied ? btnStatus.appliedValue : btnStatus.unAppliedValue}
                   fontSize={10}
                   loading={info.isApplied ? quitItemR.loading : applyItemR.loading} size='small'
-                  onClick={() => {
-                    if (!auth.isLogin) {
-                      console.log("meiyou1")
+                  // onClick={() => {
+                  //   if (!auth.isLogin) {
+                  //     //console.log("meiyou1")
 
-                    }
-                  }}
+                  //   }
+                  // }}
                 />
               </div>
             </div>
@@ -344,14 +379,23 @@ function Info({ type }: Props): ReactElement {
             cancelText={"取消"}
             onOk={() => history.push('/login')}
             onCancel={() => setShowModal(false)}
-          //confirmLoading={applyItemR.loading}
+            //confirmLoading={applyItemR.loading}
           >
-
-            {/* <RadioGroup name='接机服务和住宿服务' radioList={['需要', '不需要']} bind={setNeedService} initialData={needService} /> */}
             <span style={{ fontSize: 12, color: '#faad14' }}><InfoCircleOutlined />  报名前请先登录或注册</span>
 
           </Modal>
-
+          <Modal
+          title="你还没有完善身份信息"
+          visible={showHint}
+          onOk={()=>{
+            history.push("/center")
+          }}
+          onCancel={()=>setshowHint(false)}
+          okText={"立即前往"}
+          cancelText={"稍后前往"}
+        >
+        <span style={{ fontSize: 12, color: '#faad14' }}><InfoCircleOutlined />    如果未完善身份信息，部分功能将无法实现，是否前往完善？</span>
+        </Modal>
         </div>
         <div className={style.meetingImg}>
           <h2>精彩内容</h2>

@@ -6,14 +6,16 @@
  * TODO: 记得添加api和逻辑
  */
 
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, createContext } from 'react';
 
 import { Input } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 
 import style from './Search.module.scss';
 import { useRequest } from '@umijs/hooks';
 import { SearchMeeting } from '@/services/apis/item';
+
+
 
 interface Props {
   className?: string;
@@ -21,30 +23,34 @@ interface Props {
   showSearch: boolean;
 }
 
-function Search({ className, showSearch }: Props): ReactElement {
+
+function Search(props: any, { className, showSearch }: Props): ReactElement {
   const history = useHistory()
   const { Search } = Input
   const [searchCondition, setsearchCondition] = useState("")
-
+  const [searchMeetingList, setsearchMeetingList] = useState([""])
   const SearchMeetingR = useRequest(SearchMeeting, {
     manual: true,
     onSuccess: (result, params) => {
       if (result.data) {
-        console.log(result.data)
-
+        //let meetingList = result.data.meeting
+        //console.log(result.data)
+        setsearchMeetingList(result.data.meeting)
+        //setmeetingList([""])
+        props.history.push({pathname: '/', params:{searchMeetingList: searchMeetingList, searched: true}})
       }
     }
   })
 
-
-
+  //console.log(props)
   const handleSearch = (e: any) => {
     //history.push({ pathname: '/search', state: { value } })
-    console.log(e)
+    //console.log(e)
     SearchMeetingR.run(e)
+    setsearchCondition("")
   }
   return (
-    <div className={`${className} ${showSearch ? style.wrapper : style.hideWrapper}`} >
+    <div className={`${className} ${props.showSearch ? style.wrapper : style.hideWrapper}`} >
       <div className={style.container}>
         <Search
           className={style.show}
@@ -63,4 +69,4 @@ function Search({ className, showSearch }: Props): ReactElement {
   )
 }
 
-export default Search
+export default withRouter(Search) 

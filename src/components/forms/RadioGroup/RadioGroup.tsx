@@ -5,8 +5,8 @@
  * @ Description: RadioGroup主要用于性别input选项
  */
 
-import React, { ReactElement, useState } from 'react';
-import {useUpdateEffect} from '@umijs/hooks'
+import React, { ReactElement, useState, useEffect } from 'react';
+import { useUpdateEffect } from '@umijs/hooks'
 import style from './RadioGroup.module.scss';
 
 interface Props {
@@ -16,15 +16,22 @@ interface Props {
   initialData?: any;
 }
 
-function RadioGroup({ name, radioList, bind, initialData = radioList[0] }: Props): ReactElement {
+function RadioGroup({ name, radioList, bind, initialData}: Props): ReactElement {
   const [checkedTarget, setCheckedTarget] = useState(initialData)
   const handleChange = (e: any) => {
     bind(e.target.value)
     setCheckedTarget(e.target.value)
   }
+  // useEffect(() => {
+  //   if (radioList[0] != "") {
+  //     setCheckedTarget(radioList[0])
+  //     console.log("123")
+  //   }
+  // })
   useUpdateEffect(() => {
     setCheckedTarget(initialData)
   }, [initialData])
+  //console.log(checkedTarget)
   return (
     <div className={style.container}>
       <span className={style.name}>{name}</span>

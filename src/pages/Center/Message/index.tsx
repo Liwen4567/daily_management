@@ -21,6 +21,8 @@ import {
   feedback,
   getUserMessage,
 } from '@/services/apis/message';
+import { toUpper } from 'lodash';
+import { useImmer } from 'use-immer';
 
 
 
@@ -60,14 +62,22 @@ function Message({ }: Props): ReactElement {
   const [IsModelShow, setIsModelShow] = useState(false)
   const { Panel } = Collapse
 
+
   //反馈消息
-  // const feedbackR = useRequest(feedback, {
-  //   onSuccess: (result, param) => {
-  //     if (result.data) {
+  const feedbackR = useRequest(feedback, {
+    manual: true,
+    onSuccess: (result, param) => {
+      if (result.data) {
+              
+         
+      }
+    }
+  })
 
-
-  //     }
-  //   }
+  // feedbackR.run({
+  //   username: "",
+  //   message: "string",
+  //   updataTime: "string"
   // })
 
   //获取系统消息
@@ -122,7 +132,7 @@ function Message({ }: Props): ReactElement {
           autoSize={{ minRows: 3, maxRows: 10 }}
         />
       </Modal>
-      <Collapse  className={style.collapse} expandIconPosition='right'>
+      <Collapse className={style.collapse} expandIconPosition='right'>
         {msgList.map((item, index) => {
           return (
             <Panel
@@ -131,11 +141,11 @@ function Message({ }: Props): ReactElement {
                 <>
                   <span>From:   {index}</span>
                   <span style={{
-                    marginLeft: 20+ "px"
+                    marginLeft: 20 + "px"
                   }}>Time:   {index}</span>
                 </>
               }
-              className={style.Panel} 
+              className={style.Panel}
             >
               {item}
             </Panel>

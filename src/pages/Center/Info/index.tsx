@@ -8,6 +8,7 @@
 import React, {
   ReactElement,
   useState,
+  useEffect,
 } from 'react';
 
 import {
@@ -40,11 +41,14 @@ import { verificationWaitTime } from '@/constant'
 import style from './Info.module.scss';
 import { useImmer } from 'use-immer'
 import validate from '@/utils/validate'
+import { InfoCircleOutlined } from '@ant-design/icons';
 import DetailInfo from '@/components/commons/DetailInfo/DetailInfo'
+
 
 interface Props {
 
 }
+
 
 function Info(props: Props): ReactElement {
   const [count, start, verificationStatus] = useCountDown(verificationWaitTime)
@@ -71,12 +75,30 @@ function Info(props: Props): ReactElement {
   const history = useHistory()
   const authC = authContainer.useContainer()
   const [detailInfo, setDetailInfo] = useState(false)
+  const [showHint, setshowHint] = useState(false)
+  const { confirm } = Modal;
+
 
   const [validateMsg, setValidateMsg] = useImmer({
     key: { msg: '手机号尽量与微信号保持一致', warn: false, isRight: false },
     pwd: { msg: '密码不少于8位', warn: false, isRight: false },
     verification: { msg: '', warn: false, isRight: false },
   })
+
+  
+
+
+  useEffect(() => {
+    if (role == "") {
+      setshowHint(true)
+    }
+  })
+
+
+
+
+
+
 
 
   const userInfoR = useRequest(getUserInfo, {
@@ -86,7 +108,7 @@ function Info(props: Props): ReactElement {
         setAvatar(`http://www.ljhhhx.com:8080/meeting/userIcon/${result.data.info.avatar}`)
         setGender(result.data.info.gender)
         setrole(result.data.info.role)
-        //setrole("嘉宾")
+        //setrole("")
         name.setValue(result.data.info.username)
         mail.setValue(result.data.info.emailaddr)
         phone.setValue(result.data.info.phone)
@@ -126,6 +148,7 @@ function Info(props: Props): ReactElement {
   const handleModalCancel = () => {
     setShowModal(false)
     setDetailInfo(false)
+    setshowHint(false)
   }
 
 
@@ -288,7 +311,7 @@ function Info(props: Props): ReactElement {
           visible={detailInfo}
           onOk={handleModalCancel}
           onCancel={handleModalCancel}
-          //confirmLoading={updatePwdR.loading}
+        //confirmLoading={updatePwdR.loading}
         >
           <form className={style.fix} onInput={checkValidate.run}>
             <RadioGroup name='身份' radioList={['嘉宾', '学生']} bind={setrole} initialData={role} />
@@ -309,6 +332,19 @@ function Info(props: Props): ReactElement {
             )}
           </form>
 
+        </Modal>
+        <Modal
+          title="你还没有完善身份信息"
+          visible={showHint}
+          onOk={()=>{
+            handleModalCancel
+            setDetailInfo(true)
+          }}
+          onCancel={handleModalCancel}
+          okText={"立即前往"}
+          cancelText={"稍后前往"}
+        >
+        <span style={{ fontSize: 12, color: '#faad14' }}><InfoCircleOutlined />    如果未完善身份信息，部分功能将无法实现，是否前往完善？</span>
         </Modal>
         <Button type='submit' className={style.btn} value='保存' loading={updateUserR.loading} />
 
